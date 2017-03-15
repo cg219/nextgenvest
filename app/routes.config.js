@@ -1,15 +1,8 @@
-let routeFunction = function(locProvider, stateProvider) {
+let routeFunction = function(locProvider, urlProvider) {
   locProvider.html5Mode(true);
-
-  stateProvider
-    .state('main', {
-      url: '/',
-      templateUrl: 'main.html',
-      controller: 'WidgetController',
-      controllerAs: 'vm'
-    })
+  urlProvider.otherwise("/")
 }
 
-routeFunction.$inject = ['$locationProvider', '$stateProvider'];
+routeFunction.$inject = ['$locationProvider', '$urlRouterProvider'];
 
 export default routeFunction;

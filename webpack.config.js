@@ -12,19 +12,22 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: ExtractText.extract({
-          use: 'sass-loader'
-          fallback: 'css-loader'
+          use: 'css-loader!sass-loader',
+          fallback: 'style-loader?importLoaders=1'
         })
       },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        options: {
+          presets: ['es2015']
+        }
       }
     ]
   },
   plugins: [
-    new ExtractText('styles.css')
+    new ExtractText('./../styles.css')
   ],
   externals: {
     async: 'commonjs async'
