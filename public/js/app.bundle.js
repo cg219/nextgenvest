@@ -9473,9 +9473,9 @@ var WidgetController = function () {
         },
         horizontalBars: true,
         distributedSeries: true,
-        seriesBarDistance: 10,
+        seriesBarDistance: 5,
         low: 0,
-        height: '500px'
+        height: '700px'
       },
       events: {
         created: function created(data, more) {
@@ -9534,12 +9534,10 @@ var WidgetController = function () {
               x: data.x1 + data.element.width() - 10,
               y: data.y1 + 20 * .12,
               'text-anchor': 'end',
-              style: 'font-size: 12px; fill: #fff;'
+              style: 'font-size: 10px; fill: #fff;'
             });
 
             data.group.append(label);
-
-            console.log(label);
 
             data.element.attr({
               style: 'stroke-width: 20px'
@@ -43953,7 +43951,7 @@ $provide.value("$locale", {
 /* 12 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"widget\">\n  <chartist class=\"ct-chart\" chartist-data=\"vm.chart.data\" chartist-chart-options=\"vm.chart.options\" chartist-events=\"vm.chart.events\" chartist-chart-type=\"Bar\"></chartist>\n\n  <div class=\"widget__input\">\n    <label for=\"loanAmount\">Loan Amount: </label>\n    <input type=\"text\" name=\"loanAmount\" ng-model=\"vm.amount\">\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanInterestRate\">Annual Interest Rate: </label>\n    <input type=\"text\" name=\"loanInterestRate\" ng-model=\"vm.interest\">\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanPaybackPeriod\">Repayment Period (in months): </label>\n    <input type=\"text\" name=\"loanPaybackPeriod\" ng-model=\"vm.period\">\n  </div>\n\n  <h3>Direct Unsubsidized Loans for Undergraduates</h3>\n  <p>{{vm.unsubRate.rate}}</p>\n</div>";
+module.exports = "<div class=\"widget\">\n  <h1 class=\"widget__title\">Widget Test</h1>\n\n  <div class=\"widget__input\">\n    <label for=\"loanAmount\">Loan Amount: </label>\n    <div class=\"widget__input-container\">\n      <input type=\"number\" name=\"loanAmount\" ng-model=\"vm.amount\">\n    </div>\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanInterestRate\">Annual Interest Rate: </label>\n    <div class=\"widget__input-container\">\n      <input type=\"number\" name=\"loanInterestRate\" ng-model=\"vm.interest\">\n    </div>\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanPaybackPeriod\">Repayment Period (in months): </label>\n    <div class=\"widget__input-container\">\n      <input type=\"number\" name=\"loanPaybackPeriod\" ng-model=\"vm.period\">\n    </div>\n  </div>\n\n  <p>Direct Unsubsidized Loans for Undergraduates: {{vm.unsubRate.rate}}</p>\n\n  <chartist class=\"ct-chart\" chartist-data=\"vm.chart.data\" chartist-chart-options=\"vm.chart.options\" chartist-events=\"vm.chart.events\" chartist-chart-type=\"Bar\"></chartist>\n</div>";
 
 /***/ }),
 /* 13 */

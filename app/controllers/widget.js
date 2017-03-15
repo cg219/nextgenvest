@@ -24,9 +24,9 @@ class WidgetController {
         },
         horizontalBars: true,
         distributedSeries: true,
-        seriesBarDistance: 10,
+        seriesBarDistance: 5,
         low: 0,
-        height: '500px'
+        height: '700px'
       },
       events: {
         created: function(data, more) {
@@ -85,12 +85,10 @@ class WidgetController {
               x: (data.x1 + data.element.width() - 10),
               y: (data.y1 + (20 * .12)),
               'text-anchor': 'end',
-              style: 'font-size: 12px; fill: #fff;'
+              style: 'font-size: 10px; fill: #fff;'
             })
 
             data.group.append(label);
-
-            console.log(label)
             
             data.element.attr({
               style: 'stroke-width: 20px'

@@ -1017,4 +1017,27 @@ template {
     left: 0; }
 
 body {
-  background: #EFEFEF; }
+  background: #EFEFEF;
+  padding: 20px; }
+
+.widget {
+  padding: 0 30px;
+  margin-bottom: 50px; }
+  .widget__title {
+    font-size: 18px; }
+  .widget__input {
+    display: inline-block;
+    margin-right: 20px; }
+    .widget__input label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 10px; }
+  .widget__input-container {
+    padding: 5px;
+    background: white; }
+    .widget__input-container input[type="number"] {
+      font-size: 12px;
+      border: none;
+      outline: none; }
+      .widget__input-container input[type="number"]::-webkit-outer-spin-button, .widget__input-container input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none; }
