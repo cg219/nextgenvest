@@ -10,6 +10,10 @@ const RATE_DATA = {
 }
 
 app.use(express.static(__dirname + "/public"))
-app.get('/api/rate', (req, res) => res.json(RATE_DATA));
-app.get('/', (req, res) => res.sendFile(path.resolve('public/index.html')));
+app.get('/api/rate', (req, res) => {
+  res.json(RATE_DATA);
+});
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve('public/index.html'))
+});
 app.listen(PORT, () => console.log(`Connected`));

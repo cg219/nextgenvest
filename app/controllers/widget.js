@@ -5,11 +5,12 @@ import Chartist from 'chartist';
 const MONTHS_IN_YEAR = 12;
 
 class WidgetController {
-  constructor() {
+  constructor(Rates) {
     this.name = 'widgetController';
     this.amount = 60000;
     this.interest = 0.05;
     this.period = 6;
+    this.unsubRate = Rates.getUnsubRate();
     this.chart = {
       data: {
         labels: this.createLabels(this.period),
@@ -106,5 +107,7 @@ class WidgetController {
     return series;
   }
 }
+
+WidgetController.$inject = ['Rates'];
 
 export default WidgetController;

@@ -1,8 +1,20 @@
 import angular from 'angular';
-import resource from 'angular-resource';
 
 class Rates {
-  getUnsubRate() {
+  constructor(resource) {
+    this.resource = resource('/api/rate', null, {
+      'get': {
+        method: 'GET',
+        responseType: 'text'
+      }
+    });
+  }
 
+  getUnsubRate() {
+    return this.resource.get();
   }
 }
+
+Rates.$inject = ['$resource'];
+
+export default Rates
