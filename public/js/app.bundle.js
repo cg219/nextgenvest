@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 12);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9416,6 +9416,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
+__webpack_require__(9);
+module.exports = 'ngResource';
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -9442,15 +9450,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MONTHS_IN_YEAR = 12;
+var sequence = 0;
+var seriesData = [];
 
 var WidgetController = function () {
-  function WidgetController(Rates) {
+  function WidgetController(Rates, scope) {
     _classCallCheck(this, WidgetController);
 
-    this.name = 'widgetController';
+    this.scope = scope;
     this.amount = 60000;
-    this.interest = 0.05;
-    this.period = 6;
+    this.interest = 0.15;
+    this.period = 24;
     this.unsubRate = Rates.getUnsubRate();
     this.chart = {
       data: {
@@ -9458,14 +9468,19 @@ var WidgetController = function () {
         series: [this.createSeries()]
       },
       options: {
-        fullWidth: true,
         chartPadding: {
           right: 40
         },
-        showArea: true,
-        low: 0
+        horizontalBars: true,
+        distributedSeries: true,
+        seriesBarDistance: 10,
+        low: 0,
+        height: '500px'
       },
       events: {
+        created: function created(data, more) {
+          sequence = 0;
+        },
         draw: function draw(data) {
           if (data.type === 'line') {
             data.element.animate({
@@ -9511,20 +9526,101 @@ var WidgetController = function () {
                 easing: _chartist2.default.Svg.Easing.easeOutQuart
               }
             });
+          } else if (data.type === 'bar') {
+            var label = new _chartist2.default.Svg('text');
+
+            label.text('$' + Math.round(seriesData[sequence]));
+            label.attr({
+              x: data.x1 + data.element.width() - 10,
+              y: data.y1 + 20 * .12,
+              'text-anchor': 'end',
+              style: 'font-size: 12px; fill: #fff;'
+            });
+
+            data.group.append(label);
+
+            console.log(label);
+
+            data.element.attr({
+              style: 'stroke-width: 20px'
+            });
+
+            data.element.animate({
+              opacity: {
+                begin: 200 * data.index,
+                dur: 500,
+                from: 0,
+                to: 1,
+                easing: _chartist2.default.Svg.Easing.easeOutQuart
+              },
+              x2: {
+                begin: 200 * data.index,
+                dur: 1000,
+                from: data.x1,
+                to: data.x2,
+                easing: _chartist2.default.Svg.Easing.easeOutQuart
+              }
+            });
+
+            label.animate({
+              opacity: {
+                begin: 300 * data.index,
+                dur: 1000,
+                from: 0,
+                to: 1,
+                easing: _chartist2.default.Svg.Easing.easeOutQuart
+              }
+            });
+
+            sequence++;
+          } else if (data.type === 'grid') {
+            data.element.attr({
+              style: 'opacity: 0'
+            });
           }
         }
       }
     };
+
+    this.init();
   }
 
   _createClass(WidgetController, [{
+    key: 'init',
+    value: function init() {
+      var _this = this;
+
+      this.scope.$watch(function () {
+        return _this.amount;
+      }, this.paymentsChange.bind(this));
+      this.scope.$watch(function () {
+        return _this.interest;
+      }, this.paymentsChange.bind(this));
+      this.scope.$watch(function () {
+        return _this.period;
+      }, this.paymentPeriodChange.bind(this));
+    }
+  }, {
+    key: 'paymentsChange',
+    value: function paymentsChange(newValue) {
+      this.chart.data.series = [this.createSeries()];
+    }
+  }, {
+    key: 'paymentPeriodChange',
+    value: function paymentPeriodChange(newValue) {
+      this.chart.data = {
+        labels: this.createLabels(this.period),
+        series: [this.createSeries()]
+      };
+    }
+  }, {
     key: 'createLabels',
     value: function createLabels(timeSpan) {
       var labelsArray = [];
       var i = 1;
 
       for (i; i <= timeSpan; i++) {
-        labelsArray.push('Month ' + i);
+        labelsArray.push('' + i);
       }
 
       return labelsArray;
@@ -9538,7 +9634,7 @@ var WidgetController = function () {
       // Grabbed Loan Repayment Formula from http://www.financeformulas.net/Loan_Payment_Formula.html
       var payment = ratePerPeriod * this.amount / (1 - Math.pow(1 + ratePerPeriod, this.period * -1));
       var i = 0;
-      var newAmount = this.amount;
+      var newAmount = payment * this.period;
 
       for (i; i < this.period; i++) {
         if (i > 0) {
@@ -9548,6 +9644,7 @@ var WidgetController = function () {
         series.push(newAmount);
       }
 
+      seriesData = series;
       return series;
     }
   }]);
@@ -9555,12 +9652,12 @@ var WidgetController = function () {
   return WidgetController;
 }();
 
-WidgetController.$inject = ['Rates'];
+WidgetController.$inject = ['Rates', '$scope'];
 
 exports.default = WidgetController;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9570,7 +9667,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _widget = __webpack_require__(11);
+var _widget = __webpack_require__(12);
 
 var _widget2 = _interopRequireDefault(_widget);
 
@@ -9593,7 +9690,7 @@ routeFunction.$inject = ['$locationProvider', '$urlRouterProvider', '$stateProvi
 exports.default = routeFunction;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9640,13 +9737,13 @@ Rates.$inject = ['$resource'];
 exports.default = Rates;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 /**
@@ -10499,14 +10596,6 @@ angular.module('ngResource', ['ng']).
 
 
 })(window, window.angular);
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(8);
-module.exports = 'ngResource';
 
 
 /***/ }),
@@ -43860,13 +43949,14 @@ $provide.value("$locale", {
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ }),
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"widget\">\n  <chartist class=\"ct-chart\" chartist-data=\"vm.chart.data\" chartist-chart-options=\"vm.chart.options\" chartist-events=\"vm.chart.events\" chartist-chart-type=\"Line\"></chartist>\n\n  <div class=\"widget__input\">\n    <label for=\"loanAmount\">Loan Amount: </label>\n    <input type=\"text\" name=\"loanAmount\" ng-model=\"vm.amount\">\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanInterestRate\">Loan Interest Rate: </label>\n    <input type=\"text\" name=\"loanInterestRate\" ng-model=\"vm.interest\">\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanPaybackPeriod\">Loan Period: </label>\n    <input type=\"text\" name=\"loanPaybackPeriod\" ng-model=\"vm.period\">\n  </div>\n\n  <h3>Direct Unsubsidized Loans for Undergraduates</h3>\n  <p>{{vm.unsubRate.rate}}</p>\n</div>";
+module.exports = "<div class=\"widget\">\n  <chartist class=\"ct-chart\" chartist-data=\"vm.chart.data\" chartist-chart-options=\"vm.chart.options\" chartist-events=\"vm.chart.events\" chartist-chart-type=\"Bar\"></chartist>\n\n  <div class=\"widget__input\">\n    <label for=\"loanAmount\">Loan Amount: </label>\n    <input type=\"text\" name=\"loanAmount\" ng-model=\"vm.amount\">\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanInterestRate\">Annual Interest Rate: </label>\n    <input type=\"text\" name=\"loanInterestRate\" ng-model=\"vm.interest\">\n  </div>\n  <div class=\"widget__input\">\n    <label for=\"loanPaybackPeriod\">Repayment Period (in months): </label>\n    <input type=\"text\" name=\"loanPaybackPeriod\" ng-model=\"vm.period\">\n  </div>\n\n  <h3>Direct Unsubsidized Loans for Undergraduates</h3>\n  <p>{{vm.unsubRate.rate}}</p>\n</div>";
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43884,23 +43974,23 @@ var _angularChartist = __webpack_require__(3);
 
 var _angularChartist2 = _interopRequireDefault(_angularChartist);
 
-var _angularResource = __webpack_require__(9);
+var _angularResource = __webpack_require__(4);
 
 var _angularResource2 = _interopRequireDefault(_angularResource);
 
-var _routesConfig = __webpack_require__(5);
+var _routesConfig = __webpack_require__(6);
 
 var _routesConfig2 = _interopRequireDefault(_routesConfig);
 
-var _Rates = __webpack_require__(6);
+var _Rates = __webpack_require__(7);
 
 var _Rates2 = _interopRequireDefault(_Rates);
 
-var _widget = __webpack_require__(4);
+var _widget = __webpack_require__(5);
 
 var _widget2 = _interopRequireDefault(_widget);
 
-var _index = __webpack_require__(7);
+var _index = __webpack_require__(8);
 
 var _index2 = _interopRequireDefault(_index);
 

@@ -1,16 +1,16 @@
 <div class="widget">
-  <chartist class="ct-chart" chartist-data="vm.chart.data" chartist-chart-options="vm.chart.options" chartist-events="vm.chart.events" chartist-chart-type="Line"></chartist>
+  <chartist class="ct-chart" chartist-data="vm.chart.data" chartist-chart-options="vm.chart.options" chartist-events="vm.chart.events" chartist-chart-type="Bar"></chartist>
 
   <div class="widget__input">
     <label for="loanAmount">Loan Amount: </label>
     <input type="text" name="loanAmount" ng-model="vm.amount">
   </div>
   <div class="widget__input">
-    <label for="loanInterestRate">Loan Interest Rate: </label>
+    <label for="loanInterestRate">Annual Interest Rate: </label>
     <input type="text" name="loanInterestRate" ng-model="vm.interest">
   </div>
   <div class="widget__input">
-    <label for="loanPaybackPeriod">Loan Period: </label>
+    <label for="loanPaybackPeriod">Repayment Period (in months): </label>
     <input type="text" name="loanPaybackPeriod" ng-model="vm.period">
   </div>
 
