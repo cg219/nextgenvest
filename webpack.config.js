@@ -23,8 +23,18 @@ module.exports = {
         options: {
           presets: ['es2015']
         }
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader',
+        exclude: /node_modules/
       }
     ]
+  },
+  resolve: {
+    alias: {
+      Chartist: path.resolve(__dirname, './node_modules/chartist/dist/scss/chartist.scss')
+    }
   },
   plugins: [
     new ExtractText('./../styles.css')
