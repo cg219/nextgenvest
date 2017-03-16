@@ -6,5 +6,7 @@ npm install
 ```
 
 ## Run
-`npm start`
+```
+npm start
+```
 Open Browser to `http://localhost:5000/`
